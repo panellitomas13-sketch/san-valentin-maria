@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>San Valentín 💖</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffb6c1, #ffe6f0);
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      transition: background 1s ease;
+    }
+
+    body.fondo-nosotros {
+      background: 
+        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url("nosotros.jpg") center/cover no-repeat;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 400px;
+      animation: aparecer 1s ease;
+      z-index: 2;
+    }
+
+    body.fondo-nosotros .card {
+      background: rgba(255,255,255,0.9);
+    }
+
+    @keyframes aparecer {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    h1 {
+      color: #e60073;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #btnAvanzar, #btnSi {
+      background-color: #ff4d88;
+      color: white;
+    }
+
+    #btnSi {
+      animation: latido 1.5s infinite;
+    }
+
+    @keyframes latido {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    #btnNo {
+      background-color: #cccccc;
+      color: black;
+      position: relative;
+    }
+
+    /* Corazones flotando */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 20px;
+      animation: flotar 6s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes flotar {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100vh);
+        opacity: 0;
+      }
+    }
+
+    /* Explosión */
+    .explosion-heart {
+      position: absolute;
+      font-size: 22px;
+      pointer-events: none;
+      animation: explotar 1.5s ease-out forwards;
+    }
+
+    @keyframes explotar {
+      from {
+        transform: translate(0,0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="pantalla">
+    <h1>Para Maria 💖</h1>
+    <button id="btnAvanzar">Avanzar</button>
+  </div>
+
+  <script>
+    const pantalla = document.getElementById("pantalla");
+
+    // Corazones flotando
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 15 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }, 300);
+
+    document.getElementById("btnAvanzar").onclick = () => {
+      pantalla.innerHTML = `
+        <h1>¿Quieres ser mi cita de San Valentín? 💘</h1>
+        <button id="btnSi">Sí</button>
+        <button id="btnNo">No</button>
+      `;
+
+      let tamañoSi = 16;
+      let moverNo = 0;
+
+      const btnSi = document.getElementById("btnSi");
+      const btnNo = document.getElementById("btnNo");
+
+      btnNo.addEventListener("mouseover", () => {
+        tamañoSi += 10;
+        moverNo += 30;
+        btnSi.style.fontSize = tamañoSi + "px";
+        btnSi.style.padding = (12 + tamañoSi / 5) + "px";
+        btnNo.style.transform = `translateX(${moverNo}px)`;
+      });
+
+      btnSi.onclick = () => {
+        explosionCorazones();
+        document.body.classList.add("fondo-nosotros");
+
+        setTimeout(() => {
+          pantalla.innerHTML = `
+            <h1>💌 Invitación de San Valentín 💌</h1>
+            <p>
+              Debido a que no estás el 14 de febrero,<br><br>
+              nuestra cita se pasará al<br>
+              <strong>jueves 19 de febrero a las 22 hs</strong>.<br><br>
+              Te quiero, mi koalita 🐨💖
+            </p>
+          `;
+        }, 1200);
+      };
+    };
+
+    function explosionCorazones() {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      for (let i = 0; i < 40; i++) {
+        const heart = document.createElement("div");
+        heart.className = "explosion-heart";
+        heart.innerHTML = "💖";
+        heart.style.left = centerX + "px";
+        heart.style.top = centerY + "px";
+
+        const x = (Math.random() - 0.5) * 400 + "px";
+        const y = (Math.random() - 0.5) * 400 + "px";
+        heart.style.setProperty("--x", x);
+        heart.style.setProperty("--y", y);
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1500);
+      }
+    }
+  </script>
+
+</body>
+</html>
